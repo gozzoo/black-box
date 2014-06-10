@@ -1,5 +1,5 @@
 package registry;
 
-public interface Initializer  {	
-	public void init()  throws Exception;
+public interface Initializer  {    
+    public void init()  throws Exception;
 }

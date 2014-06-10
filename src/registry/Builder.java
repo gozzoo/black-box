@@ -1,5 +1,5 @@
 package registry;
 
 public interface Builder {
-	public Object createInstance();
+    public Object createInstance();
 }
