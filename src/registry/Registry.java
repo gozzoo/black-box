@@ -7,7 +7,7 @@ import javax.inject.*;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Registry {
-    Registry parent;
+    private Registry parent;
     private Map<String, Object> namedInstanceMap = new HashMap<>();
     private Map<Class, Object> classMap = new HashMap<>();
     
@@ -35,7 +35,7 @@ public class Registry {
     }
     
     public <T> T getInstance(Class<T> c) throws Exception {
-           T o = getExistingInstance(c);
+        T o = getExistingInstance(c);
         if (o == null)            
                o = createInstance(c);
         return o;
@@ -53,6 +53,15 @@ public class Registry {
         }
     }
 
+    public static void decorateStatic(Class c) {
+        Registry registry = RegistryBuilder.getRegistry();
+        try {
+            registry.decorateInstance(null, c);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void decorateInstance(Object o) throws Exception {
         decorateInstance(o, o.getClass());
     }
@@ -136,10 +145,13 @@ public class Registry {
             if (con.getAnnotation(Inject.class) != null) {
                 Class[] params = con.getParameterTypes();
                 Object[] args = getConstructorArguments(params);
+                con.setAccessible(true);
                 return con.newInstance(args);
             }
         }
-        return c.newInstance();
+        Constructor<?> defaultCon = c.getDeclaredConstructor();
+        defaultCon.setAccessible(true);
+        return defaultCon.newInstance();
     }
     
     public void registerImplementation(Class c) throws RegistryException {
@@ -153,7 +165,7 @@ public class Registry {
             throw new RegistryException("Key " + key + " duplicated");
         
         try {
-            Object instance = c.newInstance();
+            Object instance = newInstance(c);
             namedInstanceMap.put(key, instance);        
         } catch (Exception e) {
             throw new RegistryException(e.getMessage());
