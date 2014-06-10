@@ -1,0 +1,15 @@
+<project name="auction" default="deps" basedir=".">
+  <property name="lib"  value="lib"/>
+  <property name="repo-url" value="http://repo1.maven.org/maven2"/>
+
+  <target name="deps">
+    <mkdir dir="${lib}"/>
+    <get dest="${lib}">
+      <url url="${repo-url}/javax/inject/javax.inject/1/javax.inject-1.jar" />
+    </get>
+  </target>
+	
+  <target name="jar">
+	  <jar destfile="${temp.dir}/registry.jar" basedir="classes" />
+  </target>
+</project>
