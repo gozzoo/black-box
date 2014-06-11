@@ -40,13 +40,24 @@ public class MainTest {
     }
     
     @Test
-    public void injectInstanceByName() throws Exception {
+    public void injectNamedInstance() throws Exception {
         A a = new A();
         r.registerInstance("iname", a);
         F inst = r.getInstance(F.class);
         
         assertNotNull(inst);
         assertSame(a, inst.iname);
+    }
+    
+    @Test
+    public void injectStringProperty() throws Exception {
+        String email = "name@yahoo.com";
+        r.registerInstance("email", email);
+        FS inst = r.getInstance(FS.class);
+        
+        assertNotNull(inst);
+        assertNotNull(inst.email);
+        assertSame(inst.email, email);
     }
     
     @Test
@@ -116,4 +127,8 @@ class E {
 
 class F {
     @Inject @Named A iname;
+}
+
+class FS {
+    @Inject @Named String email;
 }
