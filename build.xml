@@ -1,5 +1,6 @@
 <project name="auction" default="deps" basedir=".">
   <property name="lib"  value="lib"/>
+  <property name="dist"  value="dist"/>
   <property name="repo-url" value="http://repo1.maven.org/maven2"/>
 
   <target name="deps">
@@ -10,6 +11,6 @@
   </target>
 	
   <target name="jar">
-	  <jar destfile="${temp.dir}/registry.jar" basedir="classes" />
+    <jar destfile="${dist}/registry.jar" basedir="bin" />
   </target>
 </project>
