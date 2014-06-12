@@ -1,7 +1,9 @@
 import static org.junit.Assert.*;
 
 import javax.inject.*;
+
 import org.junit.*;
+
 import registry.*;
 
 public class MainTest {
@@ -97,6 +99,18 @@ public class MainTest {
         assertNotNull(ci.bField);
         assertNotNull(ci.bField.aField);
     }
+    
+    @Test
+    public void initializer() throws Exception {
+        String email = "name@yahoo.com";
+        r.registerInstance("email", email);
+        FSI inst = r.getInstance(FSI.class);
+        
+        assertNotNull(inst);
+        assertNotNull(inst.email);
+        assertEquals(inst.email, "mailto:" + email);
+    }
+    
 }
 
 interface AI { }
@@ -131,4 +145,13 @@ class F {
 
 class FS {
     @Inject @Named String email;
+}
+
+class FSI implements Initializer {
+    @Inject @Named String email;
+
+    @Override
+    public void init() throws Exception {
+        email = "mailto:" + email;
+    }
 }
